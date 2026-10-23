@@ -1,0 +1,797 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Kubernetes 101: An Introduction To Container Orchestration</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+	/* Paint a complete callout box on every PDF page fragment. */
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
+/* For default-background callouts, render the border outline. */
+.callout.block-color-default_background {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+/*
+ * Toggles and callouts hold arbitrary content, so they can easily be taller
+ * than a page. They must stay breakable: avoiding breaks inside them makes
+ * Chromium push the whole block onto the next page, which leaves the previous
+ * page mostly empty before every long toggle.
+ */
+details,
+aside {
+	margin: 1.25em 0;
+}
+
+/* Keep a toggle's title on the same page as the start of its content. */
+summary {
+	page-break-after: avoid;
+	break-after: avoid;
+}
+
+/*
+ * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
+ * <summary>. Without this reset, the heading's margin-top pushes it below the
+ * ::marker (▼), so the triangle and the title appear on separate lines.
+ */
+summary h1,
+summary h2,
+summary h3,
+summary h4 {
+	margin-top: 0;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding-inline: 0.125rem;
+	padding-block: 0.375rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+/*
+ * Render emoji icons using a ::before pseudo-element to keep the glyph
+ * out of the DOM textContent traversal. This avoids double-rendering icons
+ * in callouts and page titles.
+ * NOTE(slim/html-export-pseudo-icons): I can't tagref this because it will
+ * flag as a duplicate tag after codegen.
+ */
+.icon[data-emoji]::before {
+	content: attr(data-emoji);
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	margin-right: 0.4em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.tab {
+	margin: 1.25em 0;
+	padding-inline: 1rem;
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="44694b35-44d2-48d9-aa37-0b00c4bdd63a" class="page sans"><header><h1 class="page-title" dir="auto"><strong>Kubernetes 101: An Introduction To Container Orchestration</strong></h1><p class="page-description" dir="auto"></p><table class="properties"><tbody><tr class="property-row property-row-select"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/arrow-circle-down_gray.svg" style="width:14px;height:14px;display:block"/></span>Created</th><td><span class="selected-value">2023</span></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/list_gray.svg" style="width:14px;height:14px;display:block"/></span>Tags</th><td><span class="selected-value select-value-color-gray">Article</span></td></tr><tr class="property-row property-row-select"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/arrow-circle-down_gray.svg" style="width:14px;height:14px;display:block"/></span>Company</th><td><span class="selected-value">FISClouds</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/link_gray.svg" style="width:14px;height:14px;display:block"/></span>URL</th><td><a href="https://www.fisclouds.com/kubernetes-101-an-introduction-to-container-orchestration-9265/" class="url-value">https://www.fisclouds.com/kubernetes-101-an-introduction-to-container-orchestration-9265/</a></td></tr></tbody></table></header><div class="page-body"><p id="b52e7943-d141-4490-8874-7f983f7511c1" class="" dir="auto">Kubernetes (also known as “K8s”) is an open-source container orchestration system for automating the deployment, scaling, and management of containerized <a href="https://www.fisclouds.com/services/application-modernization/">applications</a>. It was originally developed by Google and is now maintained by the Cloud Native Computing Foundation (CNCF). Kubernetes has quickly become the de facto standard for container orchestration and is used by companies such as Uber, Dropbox, and Salesforce to manage their production workloads. In this article, we’ll provide an introduction to Kubernetes, including its key features and how it works.</p><p id="43dc84bf-9755-4e11-930c-93ba838ef046" class="" dir="auto">Kubernetes provides a platform-agnostic way to deploy and manage containerized applications in a clustered environment. It automates the distribution and scheduling of containers across a cluster of nodes and provides many features to help ensure the availability and resilience of your applications.</p><figure id="710f725f-331e-40c6-a293-00e4ef5909ca" class="image" data-notion-image="https://www.fisclouds.com/wp-content/uploads/2023/01/Kubernetes-Architecture-1024x858.png.webp" dir="ltr"><a href="https://www.fisclouds.com/wp-content/uploads/2023/01/Kubernetes-Architecture-1024x858.png.webp"><img style="width:700px" src="https://www.fisclouds.com/wp-content/uploads/2023/01/Kubernetes-Architecture-1024x858.png.webp"/></a></figure><p id="98a3fcf3-518d-46dd-8754-e5c3526b7528" class="" dir="auto">Kubernetes Architecture by clickittech.com</p><h2 id="e467ccb5-cb97-4f86-80d9-d640f70ba5c4" class="" dir="auto"><strong>How Does Kubernetes Work?</strong></h2><p id="7914dcc5-4c98-46f8-b48b-840c8af30f53" class="" dir="auto">At a high level, Kubernetes works by abstracting the underlying infrastructure and providing a uniform way to deploy and manage containerized applications. This is achieved through a combination of APIs, command-line tools, and declarative configuration files.</p><p id="5288950f-7721-449e-9734-fe216a27eefd" class="" dir="auto">The basic unit of deployment in Kubernetes is the container, which is a lightweight, standalone, and executable package that includes everything needed to run an application (e.g. code, libraries, dependencies). Containers are isolated from one another and from the host operating system, making them easy to deploy and manage.</p><p id="43bdd82b-9057-4420-b964-002cf31c5a15" class="" dir="auto">In Kubernetes, containers are organized into logical units called pods. A pod is a group of one or more containers that are deployed together on the same node and share the same network namespace. Pods are the smallest deployable units in Kubernetes and are used to host applications.</p><p id="e5fbd284-c584-4842-a637-045f0673ee1d" class="" dir="auto">Kubernetes clusters are made up of a number of nodes, which are physical or virtual machines that run the Kubernetes runtime and host pods. Nodes are managed by the Kubernetes control plane, which is responsible for scheduling pods, ensuring that they are running correctly, and handling other tasks such as scaling and self-healing.</p><p id="00cabb4c-e442-49bb-91ae-0947ea0eec02" class="" dir="auto">In addition to pods and nodes, Kubernetes also includes a number of other components, such as services, which provide a stable network endpoint for a group of pods, and persistent volumes, which allow applications to store data even if the pods they are running on are terminated.</p><p id="dc53ae84-3f13-47ad-9fe9-b7c9a98072e1" class="" dir="auto">Some of the features provided by Kubernetes include:</p><ul id="36d7fba6-82f7-4687-a42b-7cda62e7874c" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Deployment and scaling of containerized applications</li></ul><ul id="03dc227c-2118-4fd9-bb55-f14d11318e6f" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Load balancing and self-healing of applications</li></ul><ul id="3cfad4a9-c7cd-4b29-9a59-d2e6fad7bd42" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Configuration management and secret management</li></ul><ul id="b9e01f44-a071-4b6d-b6b9-233c4b61b842" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Resource allocation and quotas</li></ul><ul id="f533cdad-d249-4e6c-bc63-b5b7e32f3f6d" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Service discovery and load balancing</li></ul><p id="4f388c93-cc20-4de8-907a-6e1f5d7ff696" class="" dir="auto">Kubernetes is often used in conjunction with containerization technologies such as Docker and is becoming increasingly popular as a way to deploy and manage <a href="https://www.fisclouds.com/services/application-modernization/">microservices-based applications</a>.</p><h2 id="76ff81e1-628d-4184-92bc-d158026ab4be" class="" dir="auto"><strong>Components of Kubernetes</strong></h2><p id="3f8f505f-2ff2-44ef-a466-c45829c7ad24" class="" dir="auto">Kubernetes is made up of a number of components that work together to provide a platform for deploying and managing containerized applications. Here are some of the main components of Kubernetes:</p><ol type="1" id="bfc8fcf7-ec9d-468b-87af-1abaa8bb3558" class="numbered-list" start="1" dir="auto"><li>etcd: A distributed key-value store that stores the configuration data for the cluster.</li></ol><ol type="1" id="1d122bde-fdc1-4ca5-a50b-fed1ea283260" class="numbered-list" start="2" dir="auto"><li>kube-apiserver: The API server is the front-end for the Kubernetes control plane and is responsible for exposing the Kubernetes API.</li></ol><ol type="1" id="3911474f-a10b-4f94-a1ca-89eb9264ad43" class="numbered-list" start="3" dir="auto"><li>kube-scheduler: The scheduler is responsible for scheduling pods (groups of containers) onto nodes in the cluster.</li></ol><ol type="1" id="7e91a9fa-7098-4999-9ca8-023a711011b1" class="numbered-list" start="4" dir="auto"><li>kube-controller-manager: The controller manager is responsible for running controllers, which are processes that regulate the state of the cluster.</li></ol><ol type="1" id="b7e2f06b-fb5b-45a8-9949-c0200e2d0d7a" class="numbered-list" start="5" dir="auto"><li>kubelet: A daemon that runs on each node and is responsible for managing the pods on that node.</li></ol><ol type="1" id="aa18b789-4f65-43c1-aac1-ed8a920e6e7c" class="numbered-list" start="6" dir="auto"><li>kube-proxy: A network proxy that runs on each node and is responsible for implementing the service abstraction.</li></ol><p id="bacccaa1-27b7-4753-a01e-6df093cc0c41" class="" dir="auto">These are some of the core components of the Kubernetes control plane, which is responsible for managing the cluster. In addition to these components, there are also various other tools and components that are commonly used in conjunction with Kubernetes, such as container runtime engines (e.g., Docker), monitoring tools, and configuration management tools.</p><h2 id="8687c8f0-d36c-45aa-b1b6-cfe91e3d1659" class="" dir="auto"><strong>Benefit of Kubernetes</strong></h2><p id="18ed5760-aa46-40cc-b94a-ad9b38a774fc" class="" dir="auto">Kubernetes offers many benefits for deploying and managing containerized applications:</p><ol type="1" id="fa5cd20c-07ab-4d1c-b952-8f121c522476" class="numbered-list" start="1" dir="auto"><li>Scalability: Kubernetes makes it easy to scale your applications up or down by increasing or decreasing the number of replicas of a given application.</li></ol><ol type="1" id="b833dbfa-007e-4e88-9e0a-3cfb4d0939cc" class="numbered-list" start="2" dir="auto"><li>High availability: Kubernetes can help ensure that your applications are always available by automatically restarting failed containers and distributing replicas across multiple nodes.</li></ol><ol type="1" id="2338fe28-baa8-4b2f-98d5-d6eb6e10ca60" class="numbered-list" start="3" dir="auto"><li>Automated rollouts and rollbacks: Kubernetes can automatically roll out new versions of your applications and roll back to a previous version if something goes wrong.</li></ol><ol type="1" id="77976a68-4bdb-4bda-9246-4f1034fbf1d3" class="numbered-list" start="4" dir="auto"><li>Resource management: Kubernetes allows you to specify resource limits and quotas for your applications, which helps ensure that one application does not consume too many resources at the expense of others.</li></ol><ol type="1" id="d7bae82b-1aac-42e2-8d9e-b853601bf1d0" class="numbered-list" start="5" dir="auto"><li>Centralized configuration management: Kubernetes provides a central place to store and manage the configuration of your applications, which can make it easier to deploy and manage applications at scale.</li></ol><ol type="1" id="d5334bfe-79db-44b5-bfdf-7b68f005310e" class="numbered-list" start="6" dir="auto"><li>Service discovery and load balancing: Kubernetes can automatically discover and load balance services within the cluster, which can make it easier to build and deploy microservices-based applications.</li></ol><ol type="1" id="976dfc48-0352-4796-a736-4c2a0d2a0520" class="numbered-list" start="7" dir="auto"><li>Portability: Kubernetes is platform-agnostic, which means you can use it to deploy your applications on a variety of different infrastructure platforms, including on-premises, in the cloud, or in a hybrid environment.</li></ol><h2 id="7ed35048-7402-4628-9fec-a0761e9bc79e" class="" dir="auto"><strong>How to Use Kubernetes</strong></h2><p id="21c9fe9d-4b4a-4810-8dce-26fad077e0a4" class="" dir="auto">Using Kubernetes typically involves creating a cluster of nodes (either physical machines or virtual machines) and deploying containerized applications to that cluster. The Kubernetes control plane is responsible for managing the cluster and scheduling the deployment of containers onto the nodes.</p><p id="e154ed95-fb75-4fd3-a641-f337ec58a85e" class="" dir="auto">Here are some general steps for using Kubernetes:</p><ol type="1" id="4fcefe0c-fccc-45d1-adf9-d5c4fd388641" class="numbered-list" start="1" dir="auto"><li>Install and configure a Kubernetes cluster. This involves setting up one or more machines as nodes in the cluster, and installing and configuring the Kubernetes control plane components (e.g., etcd, kube-apiserver, kube-scheduler, kube-controller-manager) on those nodes.</li></ol><ol type="1" id="e314ccea-63f2-45d3-8165-48b6782d3e13" class="numbered-list" start="2" dir="auto"><li>Package your application into a container image using a tool like Docker.</li></ol><ol type="1" id="cd39c279-afe2-43d1-b777-d4da8a254da9" class="numbered-list" start="3" dir="auto"><li>Create a Kubernetes Deployment to manage the replica set of your application. A Deployment is a higher-level concept that represents a desired state for your application. It manages the replica set and ensures that the correct number of replicas are running at all times.</li></ol><ol type="1" id="18f477a4-4df4-4edb-b891-262beaaa60ec" class="numbered-list" start="4" dir="auto"><li>Expose your application to the internet using a Kubernetes Service. A Service is a load balancer that exposes your application to external traffic.</li></ol><ol type="1" id="48dafdce-441a-4110-93a8-27b8f7904ee3" class="numbered-list" start="5" dir="auto"><li>Use Kubernetes features such as ConfigMaps, Secrets, and Persistent Volumes to manage the configuration and state of your application.</li></ol><h2 id="af4bc819-8973-4ce9-a47d-49eef45e3566" class="" dir="auto"><strong>Conclusion</strong></h2><p id="2756e035-7e53-4fcc-9448-c71ae3ec593e" class="" dir="auto">Kubernetes is a powerful and widely-used container orchestration platform that makes it easy to deploy, scale, and manage containerized applications. Its portability, reliability, and simplicity make it a great choice for organizations of all sizes. If you’re new to Kubernetes, we hope this introduction has provided a helpful overview of what it is and how it works. To learn more about Kubernetes and how to get started with it, we recommend checking out the official Kubernetes documentation and exploring the many tutorials and resources available online.</p><p id="84df9694-6137-4b7c-85dc-5569a346094c" class="" dir="auto">There are many more advanced features and concepts in Kubernetes, such as rolling updates, autoscaling, and monitoring, but these are some of the basic steps for getting started with Kubernetes.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

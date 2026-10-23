@@ -1,0 +1,797 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Accelerate Your Cloud Migration Plan With Managed Databases</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+	/* Paint a complete callout box on every PDF page fragment. */
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
+/* For default-background callouts, render the border outline. */
+.callout.block-color-default_background {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+/*
+ * Toggles and callouts hold arbitrary content, so they can easily be taller
+ * than a page. They must stay breakable: avoiding breaks inside them makes
+ * Chromium push the whole block onto the next page, which leaves the previous
+ * page mostly empty before every long toggle.
+ */
+details,
+aside {
+	margin: 1.25em 0;
+}
+
+/* Keep a toggle's title on the same page as the start of its content. */
+summary {
+	page-break-after: avoid;
+	break-after: avoid;
+}
+
+/*
+ * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
+ * <summary>. Without this reset, the heading's margin-top pushes it below the
+ * ::marker (▼), so the triangle and the title appear on separate lines.
+ */
+summary h1,
+summary h2,
+summary h3,
+summary h4 {
+	margin-top: 0;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding-inline: 0.125rem;
+	padding-block: 0.375rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+/*
+ * Render emoji icons using a ::before pseudo-element to keep the glyph
+ * out of the DOM textContent traversal. This avoids double-rendering icons
+ * in callouts and page titles.
+ * NOTE(slim/html-export-pseudo-icons): I can't tagref this because it will
+ * flag as a duplicate tag after codegen.
+ */
+.icon[data-emoji]::before {
+	content: attr(data-emoji);
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	margin-right: 0.4em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.tab {
+	margin: 1.25em 0;
+	padding-inline: 1rem;
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="4d4e6e44-0774-4299-8f34-89e5eed0f0b3" class="page sans"><header><h1 class="page-title" dir="auto">Accelerate Your Cloud Migration Plan With Managed Databases</h1><p class="page-description" dir="auto"></p><table class="properties"><tbody><tr class="property-row property-row-select"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/arrow-circle-down_gray.svg" style="width:14px;height:14px;display:block"/></span>Created</th><td><span class="selected-value">2023</span></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/list_gray.svg" style="width:14px;height:14px;display:block"/></span>Tags</th><td><span class="selected-value select-value-color-gray">Article</span></td></tr><tr class="property-row property-row-select"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/arrow-circle-down_gray.svg" style="width:14px;height:14px;display:block"/></span>Company</th><td><span class="selected-value">FISClouds</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><img src="https://app.notion.com/icons/link_gray.svg" style="width:14px;height:14px;display:block"/></span>URL</th><td><a href="https://www.fisclouds.com/accelerate-your-cloud-migration-plan-with-managed-databases-9863/" class="url-value">https://www.fisclouds.com/accelerate-your-cloud-migration-plan-with-managed-databases-9863/</a></td></tr></tbody></table></header><div class="page-body"><p id="2487d819-b87a-4c29-9230-80a5566c8003" class="" dir="auto">Managing your <a href="https://www.fisclouds.com/big-data-and-business-intelligence-how-to-leverage-data-for-competitive-advantage-9500/">database infrastructure</a> can be a chore. You need to consider working on provision, setup, and maintaining hardware. Manage the operating system, database software, management tools, and all the ongoing patches for security and maintenance. Scaling the system, ensuring that backups and restores are meeting recovery goals and that the application can continue to run during various failure scenarios. Monitoring everything to ensure that your systems are running well.</p><figure id="208aaa68-a21d-4dcc-84e1-147d6b324c48" class="image" data-notion-image="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-12.21.53-1024x522.png.webp" dir="ltr"><a href="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-12.21.53-1024x522.png.webp"><img style="width:700px" src="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-12.21.53-1024x522.png.webp"/></a></figure><p id="a6b78e3c-a1e4-440d-bd60-fc21c26dc565" class="" dir="auto">This requires a lot of work and a diverse skill set. As your database fleet grows to hundreds or even thousands of databases, the time and energy that you spend managing all this only hinders your ability to outmaneuver your competitors.</p><h2 id="0d10321f-fcdb-4c5d-9d8f-b149be86b501" class="" dir="auto"><strong>Databases are Moving to The Cloud</strong></h2><p id="3d675d51-cbb5-4de4-b539-a4bcb419a4d2" class="" dir="auto">It’s no surprise that databases are rapidly moving to the cloud. The Cloud Database Management Systems (DBMS) market is not new, but the growth in cloud revenue is a newer development. IDC predicts 80% of enterprises will speed up their shift to a cloud-centric infrastructure. This trend suggests that cloud service provider (CSP) infrastructures and the services that run on them are becoming the <a href="https://www.fisclouds.com/services/data-modernization/">new data management platform</a>.</p><p id="32c7607c-5dbe-4a51-8ad9-cdebee2b5235" class="" dir="auto">Many companies have turned to managed services in the cloud for their databases. Managed database services allow teams to focus on developing their applications instead of managing infrastructure. Let’s explore why <a href="https://www.fisclouds.com/google-cloud-platform-services/">Google Cloud</a> offers the best platform to <a href="https://www.fisclouds.com/seamless-data-warehouse-migration-to-google-cloud-platform-9676/">migrate your databases</a>.</p><h2 id="05f71094-a81c-44c8-a59a-723fbdff5f82" class="" dir="auto"><strong>5 reasons why Google Cloud is right for your databases</strong></h2><h3 id="aae96f92-adc5-41b7-b0db-0902e52b8f26" class="" dir="auto"><strong>Database capabilities for speed, scale, security, and reliability</strong></h3><figure id="c5154975-fbb5-44e9-bb5a-a5554394a866" class="image" data-notion-image="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-12.40.42-1024x518.png.webp" dir="ltr"><a href="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-12.40.42-1024x518.png.webp"><img style="width:700px" src="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-12.40.42-1024x518.png.webp"/></a></figure><p id="bf4fee92-68e7-4707-9fc9-65163bbdc0ba" class="" dir="auto">Google Cloud provides a ground-breaking platform for innovation based on decades of first-hand experience developing one-of-a-kind database systems. You can achieve massive scalability and data durability for your applications from the same underlying architecture that powers Google’s most popular, globally available products like YouTube, Search, Maps, and Gmail.</p><p id="051e9e5e-a4a6-41be-b069-af3dda804734" class="" dir="auto">Our core services Cloud Spanner, BigQuery, Firestore, Cloud SQL, AlloyDB for PostgreSQL, and Cloud Storage, for example, leverage common infrastructure such as our highly durable distributed file system, disaggregated compute and storage at every layer of the stack, and our high-performance networking infrastructure, to get the highest levels of availability and reliability i.e. up to 99.999% SLA across Spanner, Bigtable, and Firestore, and billions of transactions per second across Spanner (2B+ at peak) and Bigtable (5B+ at peak).</p><p id="8900e804-1088-4672-bf47-747183a511d9" class="" dir="auto">Many organizations have adopted our leading cloud-first solutions: Spanner, Bigtable, and Firestore to deliver the best possible experiences for their users from anywhere, in just a few clicks, and with minimal operational overhead.</p><h3 id="c25cd2cb-c9ee-41d3-b539-1d5171baf808" class="" dir="auto"><strong>Open and standards-based, providing the freedom to work</strong></h3><figure id="a694ff3f-edcf-45b5-a8ad-57d7a74d2033" class="image" data-notion-image="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.36.02-1024x536.png.webp" dir="ltr"><a href="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.36.02-1024x536.png.webp"><img style="width:700px" src="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.36.02-1024x536.png.webp"/></a></figure><p id="103c799d-43cf-44ec-b430-481f10c8afb7" class="" dir="auto">At Google Cloud, we understand that most companies have a multi-database strategy. In some cases this is intentional and in others, it’s a natural consequence of growing over the years combined with the intimidating nature of re-platforming a database.</p><p id="ba76fba5-2be1-47ea-9370-c080f410fce6" class="" dir="auto">Google Cloud databases support the most popular open source and commercial engines – MySQL, PostgreSQL, Oracle, SQL Server, and Redis – providing choice and flexibility to work the way you want.</p><p id="d1b54938-20c3-4b17-af2b-9c67fdda8356" class="" dir="auto">Cloud SQL is a fully managed relational database service for MySQL, PostgreSQL, and SQL Server. Memorystore is a fully managed database service that is 100% compatible with open-source Redis and Memcached. AlloyDB for PostgreSQL is a new PostgreSQL-compatible relational database with superior performance, scale, and availability for your most demanding enterprise workloads.</p><h3 id="85200926-d6e0-4649-8deb-b4377b5e3cd7" class="" dir="auto"><strong>Innovative, one-of-a-kind developer experiences</strong></h3><p id="b549c1bf-6ac8-4fef-8b53-e71578be64a7" class="" dir="auto">Develop rich applications quickly through our intuitive user interface, robust client and server-side libraries, and one-of-a-kind provisioning and management automation services. Experience seamless integrations with Google Cloud services like Google Compute Engine and Google Kubernetes Engine (GKE), with more than 650K GKE pods securely connected to Cloud SQL.</p><p id="5d44320a-f8c3-427a-aaa7-86355836f798" class="" dir="auto">Drive productivity by automating time-consuming tasks such as database provisioning, storage capacity management, and performance tuning. This frees developers and DBAs to focus on higher-value work like data modeling, performance optimization, and deriving value from their data.</p><p id="d93b6f6a-6237-42d4-b713-ba2181a9ab4a" class="" dir="auto">Industry-leading database observability features, such as Cloud SQL Insights and Key Visualizer, help developers address database performance problems in development and in production. These features complement existing application performance monitoring (APM) and observability tools by providing database metrics and traces through the OpenTelemetry open standard.</p><p id="483193a0-ab2f-4c2c-b6da-78ea006851ee" class="" dir="auto"><strong>The unified ecosystem of Google’s data cloud</strong></p><figure id="9a34a45f-2eeb-4f5b-95e2-f9a755803a07" class="image" data-notion-image="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.46.36-1024x577.png.webp" dir="ltr"><a href="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.46.36-1024x577.png.webp"><img style="width:700px" src="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.46.36-1024x577.png.webp"/></a></figure><p id="1bf8e8d7-6f27-4b78-adba-710210998ff5" class="" dir="auto">Google Cloud offers a <a href="https://www.fisclouds.com/the-advantage-of-using-cloud-data-warehouse-9772/">comprehensive data cloud</a> that allows you to securely unify data across your entire organization so you can break down silos, increase agility, innovate faster, and support business transformation. Bridge the gap between operational data and analytics by using BigQuery federation to query data residing in Cloud SQL, Spanner, and Bigtable without moving or copying it.</p><p id="21945874-c24c-4313-89e5-2b32836809f1" class="" dir="auto">We’re also enabling BigQuery customers to directly access Spanner data through a serverless architecture for workload-isolated analytical queries. You can now run analytical queries on your operational data in Spanner with virtually no impact on the performance of your low-latency, transactional systems. Datastream for BigQuery supports seamless replication from operational database sources such as AlloyDB, PostgreSQL, MySQL, and Oracle, directly into BigQuery.</p><p id="c3628f22-2819-42e9-a48d-e56ac4d56a44" class="" dir="auto">We connect the different stakeholders who work with data and provide a common platform for them to build upon. No matter where you start, there are always more places to go with analytics, databases, and AI and machine learning services.</p><h3 id="5e989810-c290-4546-92b2-f9397c6f71a1" class="" dir="auto"><strong>Sophisticated data security and privacy controls</strong></h3><figure id="9180ccd5-52f4-4ce5-9a37-372acb7c0f9a" class="image" data-notion-image="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.50.32-1024x464.png.webp" dir="ltr"><a href="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.50.32-1024x464.png.webp"><img style="width:700px" src="https://www.fisclouds.com/wp-content/uploads/2023/09/Screenshot-2023-09-06-at-13.50.32-1024x464.png.webp"/></a></figure><p id="4040877b-8879-4608-9fad-ad6dc978dedd" class="" dir="auto">Security and governance are key concerns for every industry, which is why we provide robust tools and technology to protect and govern your data throughout its lifecycle. Such capabilities ensure that your data is protected. Find out more about leveraging the best of Google Cloud security on our Trust and Security site.</p><p id="754b11cc-ffe9-4de9-9322-cff786577638" class="" dir="auto">All data is automatically encrypted in transit and at rest customer-managed encryption keys (CMEK) Multi-layered security approach. Integration with Cloud IAM for access control and visibility into security policies with Cloud SQL for SQL Server, we’ve enabled cross-project integration to authenticate via Managed Microsoft Active Directory. Third-party audits and certifications. Easy visibility into security policies. Access Transparency tool for visibility into our actions Google Trust Principles for deployment integrity, privileges, access, and compliance.</p><h2 id="d290228d-d0e0-4946-afed-cf4365e3fd20" class="" dir="auto"><strong>Conclusion</strong></h2><p id="2917ac72-c638-45b7-ae83-64a536e15483" class="" dir="auto"><a href="https://cloud.google.com/resources/database-migration-program">Moving</a> from a traditional on-premises database to a modern database in the cloud, or simply building new applications in the cloud, allows companies to address operational overhead, unlock new possibilities, implement new features quickly, increase application reliability, and serve users across more regions.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
