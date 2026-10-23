@@ -1,0 +1,581 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Terra Graph v2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Terra Graph offers AI-powered digital marketing services: AI automation, websites, social media, branding, video and content.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap">
+<style>
+/* Layout: asymmetric 12-col editorial grid. Work is an indexed ledger (year in mono, client, discipline).
+   The hexagon from the Terra Graph mark is the only ornament. */
+:root{
+  --bg:#F5F3F2; --surface:#FFFFFF; --ink:#1A1416; --muted:#6A5F61; --line:#E2DBDA;
+  --red:#E4122A; --red-ink:#C20E22; --on-red:#FFFFFF; --tile:#FFFFFF;
+  --f-display:"Google Sans","Product Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Google Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Google Sans",system-ui,sans-serif;
+  --band:#18121A; --band-2:#241C26; --band-fg:#F6F0F0; --band-muted:#B5A9AC; --band-line:#3A2F38;
+  --maxw:1240px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#120E0F; --surface:#1C1617; --ink:#F2ECEC; --muted:#A8999B; --line:#2E2527;
+  --red:#FF2E45; --red-ink:#FF5466; --on-red:#FFFFFF; --tile:#F4F2F2; --band:#221A1D; --band-2:#2C2226; --band-fg:#F6F0F0; --band-muted:#B5A9AC; --band-line:#3E3237; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#120E0F; --surface:#1C1617; --ink:#F2ECEC; --muted:#A8999B; --line:#2E2527;
+  --red:#FF2E45; --red-ink:#FF5466; --on-red:#FFFFFF; --tile:#F4F2F2; --band:#221A1D; --band-2:#2C2226; --band-fg:#F6F0F0; --band-muted:#B5A9AC; --band-line:#3E3237; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+@media (max-width:520px){.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+.mono{font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance;margin:0}
+
+/* nav */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:700;font-size:19px;letter-spacing:-.025em}
+.brand img{width:30px;height:auto}
+.nav ul{display:flex;gap:28px;list-style:none;margin:0 0 0 auto;padding:0}
+.nav ul a{text-decoration:none;font-weight:500;font-size:15px;color:var(--muted)}
+.nav ul a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:var(--on-red);text-decoration:none;font-weight:600;font-size:15px;padding:11px 18px;border-radius:999px;border:0;cursor:pointer;font-family:var(--f-body);transition:transform .15s,background .15s}
+.btn:hover{background:var(--red-ink);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--ink);background:transparent}
+@media (max-width:820px){.nav ul{display:none}.nav .btn{margin-left:auto}}
+
+/* hero */
+.hero{padding-block:72px 56px;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:end}
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--muted);margin-bottom:28px}
+.eyebrow i{width:9px;height:10px;background:var(--red);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.hero h1{font-size:clamp(38px,6.2vw,92px);font-weight:700;letter-spacing:-.025em;line-height:.98}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero p.lede{font-size:clamp(18px,1.6vw,21px);max-width:34ch;color:var(--ink);margin:0 0 28px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.markets{margin-top:56px;display:flex;flex-wrap:wrap;gap:10px 28px;align-items:baseline;border-top:1px solid var(--line);padding-top:20px}
+.markets .mono{color:var(--muted)}
+.markets span.c{font-family:var(--f-display);font-weight:700;font-size:15px}
+.markets span.c b{font-family:var(--f-mono);font-weight:500;font-size:11px;color:var(--red);margin-right:6px;letter-spacing:.06em}
+.hexbg{position:absolute;right:-120px;top:-60px;width:520px;opacity:.07;pointer-events:none}
+@media (max-width:860px){.hero-grid{grid-template-columns:minmax(0,1fr);gap:28px}.hero{padding-block:48px 40px}.hexbg{width:340px;right:-140px}}
+
+/* stats */
+.stats{border-block:1px solid var(--line);background:var(--surface)}
+.stats .wrap{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.stat{padding-block:26px;padding-inline:20px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0;padding-left:0}
+.stat strong{display:block;font-family:var(--f-display);font-weight:700;font-size:clamp(30px,3.4vw,44px);line-height:1;font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:8px;color:var(--muted)}
+@media (max-width:860px){.stats .wrap{grid-template-columns:repeat(3,minmax(0,1fr))}.stat:nth-child(4){border-left:0;padding-left:0}.stat:nth-child(-n+3){border-bottom:1px solid var(--line)}}
+@media (max-width:480px){.stat{padding-inline:12px}}
+
+/* sections */
+section.block{padding-block:96px}
+.sec-head{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:48px;margin-bottom:48px;align-items:end}
+.sec-head h2{font-size:clamp(34px,4.4vw,60px)}
+.sec-head p{margin:0;color:var(--muted);max-width:56ch}
+.kicker{color:var(--red);margin-bottom:14px;display:block}
+@media (max-width:860px){section.block{padding-block:64px}.sec-head{grid-template-columns:minmax(0,1fr);gap:16px;margin-bottom:32px}}
+
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:48px}
+.about .body p{font-size:clamp(19px,1.8vw,24px);line-height:1.5;margin:0 0 20px;max-width:40ch}
+.about .body p+p{font-size:17px;color:var(--muted);max-width:62ch;line-height:1.65}
+@media (max-width:860px){.about{grid-template-columns:minmax(0,1fr);gap:16px}}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ink)}
+.svc li{list-style:none;padding:20px 20px 20px 0;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:baseline;font-family:var(--f-display);font-weight:600;font-size:clamp(18px,1.7vw,22px);line-height:1.2}
+.svc li .mono{color:var(--muted);font-size:11.5px;flex:none;width:2.4em}
+.svc{padding:0;margin:0}
+.svc li.feat{grid-column:1/-1;padding:0;border-bottom:1px solid var(--line)}
+.svc li.feat a{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;width:100%;padding:22px 24px;margin-block:14px;background:var(--red);color:var(--on-red);border-radius:12px;text-decoration:none;transition:background .15s}
+.svc li.feat a:hover{background:var(--red-ink)}
+.svc li.feat .l{display:flex;gap:14px;align-items:baseline;font-weight:700;font-size:clamp(20px,2vw,26px)}
+.svc li.feat .mono{color:var(--on-red);opacity:.8}
+.svc li.feat .r{font-family:var(--f-body);font-size:15px;font-weight:500;display:flex;gap:8px;align-items:center}
+/* AI band */
+.ai{background:var(--band);color:var(--band-fg);position:relative;overflow:hidden}
+.ai .wrap{padding-block:96px;position:relative}
+.ai .badge{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:var(--on-red);border-radius:999px;padding:6px 12px;margin-bottom:22px}
+.ai-top{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:48px;align-items:end;margin-bottom:56px}
+.ai h2{font-size:clamp(40px,6vw,84px)}
+.ai h2 em{font-style:normal;color:var(--red)}
+.ai-top p{margin:0;font-size:clamp(17px,1.5vw,19px);color:var(--band-muted);max-width:52ch}
+.ai-top p strong{color:var(--band-fg);font-weight:500}
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--band-line);border:1px solid var(--band-line);border-radius:14px;overflow:hidden}
+.tool{background:var(--band);padding:28px;display:flex;flex-direction:column;gap:10px;min-width:0;transition:background .2s}
+.tool:hover{background:var(--band-2)}
+.tool .tag{color:var(--red);font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.tool h4{margin:0;font-size:21px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.tool p{margin:0;color:var(--band-muted);font-size:15.5px;line-height:1.55}
+.tool ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.tool li{font-size:14.5px;padding-left:16px;position:relative;color:var(--band-fg)}
+.tool li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:8px;background:var(--red);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:56px;list-style:none;padding:0;counter-reset:st}
+.steps li{border-top:2px solid var(--red);padding-top:16px;min-width:0}
+.steps .mono{color:var(--red)}
+.steps b{display:block;font-size:19px;margin:6px 0 4px}
+.steps span.d{color:var(--band-muted);font-size:15px;line-height:1.5;display:block}
+.ai-cta{margin-top:48px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.ai-cta .note{color:var(--band-muted);font-size:14.5px}
+.ai .hexbg{opacity:.06;right:-160px;top:-80px;width:600px}
+@media (max-width:960px){.tools{grid-template-columns:repeat(2,minmax(0,1fr))}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){.ai .wrap{padding-block:64px}.ai-top{grid-template-columns:minmax(0,1fr);gap:20px;margin-bottom:36px}}
+@media (max-width:600px){.tools{grid-template-columns:minmax(0,1fr)}.tool{padding:22px}}
+@media (max-width:420px){.steps{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){.svc{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.svc{grid-template-columns:minmax(0,1fr)}}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;margin-top:72px}
+.duo h3{font-size:22px;margin-bottom:18px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
+.tags li{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:15px;font-weight:500}
+.certs{list-style:none;margin:0;padding:0;columns:2;column-gap:28px}
+.certs li{break-inside:avoid;padding:8px 0 8px 22px;border-bottom:1px solid var(--line);position:relative;font-size:15.5px}
+.certs li::before{content:"";position:absolute;left:0;top:15px;width:9px;height:10px;background:var(--red);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+@media (max-width:860px){.duo{grid-template-columns:minmax(0,1fr);gap:40px;margin-top:48px}}
+@media (max-width:480px){.certs{columns:1}}
+
+/* work nav */
+.worknav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:56px}
+.worknav a{text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-weight:500;font-size:15px;background:var(--surface);display:inline-flex;gap:8px;align-items:center}
+.worknav a .mono{color:var(--red);font-size:11px}
+.worknav a:hover{border-color:var(--ink)}
+.cat{margin-top:88px;scroll-margin-top:96px}
+.cat:first-of-type{margin-top:0}
+.cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:28px;flex-wrap:wrap}
+.cat-head h3{font-size:clamp(24px,2.6vw,34px)}
+.cat-head .mono{color:var(--muted)}
+
+/* web cards */
+.web{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 32px}
+.web a{text-decoration:none;display:block}
+.shot{aspect-ratio:16/9.4;max-width:100%;overflow:hidden;border-radius:10px;border:1px solid var(--line);background:var(--surface);position:relative}
+.shot::before{content:"";display:block;height:22px;border-bottom:1px solid var(--line);background:var(--surface);background-image:radial-gradient(circle at 12px 11px,var(--line) 3.5px,transparent 4px),radial-gradient(circle at 26px 11px,var(--line) 3.5px,transparent 4px),radial-gradient(circle at 40px 11px,var(--line) 3.5px,transparent 4px)}
+.shot img{display:block;width:100%;height:calc(100% - 22px);object-fit:cover;object-position:top;transition:transform .5s ease}
+.web a:hover .shot img{transform:scale(1.025)}
+.meta{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-top:14px}
+.meta h4{margin:0;font-family:var(--f-display);font-weight:700;font-size:19px;line-height:1.25}
+.meta .mono{color:var(--muted);flex:none}
+.url{color:var(--muted);font-size:14.5px;margin-top:2px;display:flex;align-items:center;gap:6px}
+.web a:hover .url{color:var(--red)}
+@media (max-width:720px){.web{grid-template-columns:minmax(0,1fr);gap:32px}}
+
+/* social */
+.social{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:20px}
+.phone{display:block;text-decoration:none}
+.phone .frame{border-radius:18px;overflow:hidden;border:1px solid var(--line);aspect-ratio:9/16;max-width:100%;background:var(--surface)}
+.phone img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform .4s}
+.phone:hover img{transform:translateY(-2%)}
+.phone h4{font-family:var(--f-display);font-weight:700;font-size:15.5px;line-height:1.25;margin:12px 0 2px}
+.phone .mono{color:var(--muted);font-size:11.5px;text-transform:none;letter-spacing:.01em}
+@media (max-width:1000px){.social{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:520px){.social{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
+
+/* branding */
+.brands{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.brands figure{margin:0}
+.brands .tile{background:var(--tile);border:1px solid var(--line);border-radius:10px;aspect-ratio:2/1;max-width:100%;overflow:hidden}
+.brands .tile img{width:100%;height:100%;object-fit:cover;display:block}
+.brands figcaption{display:flex;justify-content:space-between;gap:10px;margin-top:10px;font-weight:500;font-size:15px;line-height:1.3}
+.brands figcaption .mono{color:var(--muted);flex:none}
+.brands .lead{grid-column:span 2;grid-row:span 2}
+.brands .lead .tile{aspect-ratio:auto;height:calc(100% - 34px)}
+.brands .lead figcaption{font-size:17px}
+@media (max-width:900px){.brands{grid-template-columns:repeat(2,minmax(0,1fr))}.brands .lead{grid-row:auto}.brands .lead .tile{aspect-ratio:2/1;height:auto}}
+@media (max-width:480px){.brands{grid-template-columns:minmax(0,1fr)}.brands .lead{grid-column:auto}}
+
+/* ledgers (video, writing) */
+.ledger{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.ledger li{border-bottom:1px solid var(--line)}
+.ledger a{display:grid;grid-template-columns:4.5em minmax(0,1fr) minmax(0,14em) 2em;gap:20px;align-items:center;padding:16px 0;text-decoration:none;transition:padding .2s,background .2s}
+.ledger a:hover{padding-left:10px;background:var(--surface)}
+.ledger .yr{color:var(--muted)}
+.ledger .t{font-weight:600;font-size:17px;line-height:1.35}
+.ledger .co{color:var(--muted);font-size:15px}
+.ledger .go{color:var(--red);justify-self:end;display:flex}
+@media (max-width:640px){.ledger a{grid-template-columns:3.6em minmax(0,1fr) 1.4em;gap:12px}.ledger .co{grid-column:2;grid-row:2;margin-top:-10px;font-size:14px}.ledger .go{grid-column:3;grid-row:1}}
+details.more{margin-top:0}
+details.more summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-weight:600;color:var(--red)}
+details.more summary::-webkit-details-marker{display:none}
+
+/* clients */
+.clients{display:flex;flex-wrap:wrap;gap:6px 0;font-family:var(--f-display);font-weight:500;font-size:clamp(22px,2.7vw,38px);line-height:1.25;letter-spacing:-.015em}
+.clients span{white-space:nowrap}
+.clients span::after{content:"";display:inline-block;width:.32em;height:.36em;margin:0 .5em;background:var(--red);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);vertical-align:.12em}
+.clients span:last-child::after{display:none}
+
+/* contact */
+.contact{background:var(--red);color:var(--on-red)}
+.contact .wrap{padding-block:96px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:end}
+.contact h2{font-size:clamp(38px,5.6vw,80px);font-weight:700;letter-spacing:-.025em;line-height:.98}
+.contact p{max-width:44ch;font-size:18px;margin:20px 0 0;opacity:.92}
+.cbox{display:grid;gap:14px}
+.crow{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid rgba(255,255,255,.35);padding-top:14px;flex-wrap:wrap}
+.crow .mono{opacity:.8}
+.crow .v{font-family:var(--f-display);font-weight:700;font-size:clamp(17px,1.7vw,21px);user-select:all;word-break:break-all}
+.crow a.v{text-decoration:none}
+.crow a.v:hover{text-decoration:underline}
+.copy{background:rgba(255,255,255,.16);color:inherit;border:0;border-radius:999px;padding:7px 14px;font:600 13.5px var(--f-body);cursor:pointer}
+.copy:hover{background:rgba(255,255,255,.28)}
+@media (max-width:860px){.contact .wrap{grid-template-columns:minmax(0,1fr);padding-block:64px;gap:36px}}
+footer{padding-block:28px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.arrow{width:14px;height:14px;flex:none}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="img/logo.png" alt="">Terra Graph</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#ai">AI Automation</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#clients">Clients</a></li>
+    </ul>
+    <a class="btn" href="#contact">Start a project</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <svg class="hexbg" viewBox="0 0 100 110" aria-hidden="true"><path d="M50 4 92 27v56L50 106 8 83V27Z" fill="none" stroke="var(--red)" stroke-width="7" stroke-linejoin="round"/><path d="M50 18 80 35v40L50 92 20 75V35Z" fill="var(--red)"/></svg>
+    <div class="wrap">
+      <div class="eyebrow mono"><i></i>Digital marketing agency · Est. 2012</div>
+      <div class="hero-grid">
+        <h1><em>AI-Powered</em> Digital Marketing Services</h1>
+        <div>
+          <p class="lede">We pair AI automation with hands-on marketing craft. Websites, social channels, brand identities, video and content that help brands get seen, delivered faster by a team that puts AI agents to work.</p>
+          <div class="cta-row">
+            <a class="btn" href="#contact">Start a project
+              <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+            <a class="btn ghost" href="#ai">Explore AI automation</a>
+          </div>
+        </div>
+      </div>
+      <div class="markets">
+        <span class="mono">Clients across</span>
+        <span class="c"><b>MY</b>Malaysia</span>
+        <span class="c"><b>IN</b>India</span>
+        <span class="c"><b>SA</b>Saudi Arabia</span>
+        <span class="c"><b>US</b>United States</span>
+        <span class="c"><b>AU</b>Australia</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats" aria-label="Portfolio at a glance">
+    <div class="wrap">
+      <div class="stat"><strong>8</strong><span class="mono">Websites</span></div>
+      <div class="stat"><strong>6</strong><span class="mono">Social channels</span></div>
+      <div class="stat"><strong>11</strong><span class="mono">Brand identities</span></div>
+      <div class="stat"><strong>10</strong><span class="mono">Videos</span></div>
+      <div class="stat"><strong>25</strong><span class="mono">Articles</span></div>
+      <div class="stat"><strong>9</strong><span class="mono">Industries</span></div>
+    </div>
+  </div>
+
+  <section class="block" id="about">
+    <div class="wrap about">
+      <div><span class="kicker mono">About us</span><h2 style="font-size:clamp(34px,4.4vw,60px)">Who we are</h2></div>
+      <div class="body">
+        <p>We are a digital marketing agency working with global clients across Malaysia, India, Saudi Arabia, the United States and Australia. We write meaningful content, manage digital channels and create marketing collateral that supports product marketing.</p>
+        <p>Terra Graph has served clients in the creative industry, agritech, startups, publishing, distribution, technology, healthcare and manufacturing. We work closely with cross-functional teams to keep a brand consistent across every digital platform, and we keep up with industry trends so our marketing stays data-driven and current.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai" id="ai">
+    <svg class="hexbg" viewBox="0 0 100 110" aria-hidden="true"><path d="M50 4 92 27v56L50 106 8 83V27Z" fill="none" stroke="var(--red)" stroke-width="7" stroke-linejoin="round"/><path d="M50 18 80 35v40L50 92 20 75V35Z" fill="var(--red)"/></svg>
+    <div class="wrap">
+      <span class="badge mono">Featured service</span>
+      <div class="ai-top">
+        <h2>AI <em>Automation</em></h2>
+        <p><strong>We put AI agents to work on your marketing operations.</strong> Using Claude, we automate the repetitive work behind campaigns, reporting and content production, so your team spends its time on strategy and creative decisions. We design the workflows, set them up inside your tools and train your team to run them.</p>
+      </div>
+      <div class="tools">
+        <article class="tool">
+          <span class="tag">Claude Code</span>
+          <h4>Custom builds and integrations</h4>
+          <p>Agentic coding for marketing tech, from a landing page to a full data pipeline.</p>
+          <ul><li>Website and landing page builds</li><li>Scripts that sync CRM, CMS and analytics data</li><li>Tracking setup and SEO fixes at scale</li></ul>
+        </article>
+        <article class="tool">
+          <span class="tag">Claude Cowork</span>
+          <h4>Marketing operations on autopilot</h4>
+          <p>Claude works through your files and tasks like a teammate, producing ready-to-use deliverables.</p>
+          <ul><li>Campaign and performance reports</li><li>Content calendars and briefs</li><li>Slide decks, docs and spreadsheets</li></ul>
+        </article>
+        <article class="tool">
+          <span class="tag">Claude in Chrome</span>
+          <h4>Browser workflows</h4>
+          <p>Hand off the repetitive clicking that eats into a marketer’s week.</p>
+          <ul><li>Competitor and market research</li><li>Checking and updating web listings</li><li>QA of live pages and forms</li></ul>
+        </article>
+        <article class="tool">
+          <span class="tag">Connectors (MCP)</span>
+          <h4>Connected to your stack</h4>
+          <p>Claude reads from and updates the apps your team already uses.</p>
+          <ul><li>Google Workspace: Gmail, Drive, Docs, Sheets</li><li>Slack and project management tools</li><li>CRMs such as HubSpot</li></ul>
+        </article>
+        <article class="tool">
+          <span class="tag">Skills &amp; Plugins</span>
+          <h4>Your brand, built in</h4>
+          <p>We package your playbook so every AI output follows it.</p>
+          <ul><li>Brand guidelines and tone of voice</li><li>Caption, blog and email writing styles</li><li>Approval and QA checklists</li></ul>
+        </article>
+        <article class="tool">
+          <span class="tag">Scheduled tasks</span>
+          <h4>Work that runs itself</h4>
+          <p>Recurring jobs that run on a schedule and deliver results to your team.</p>
+          <ul><li>Weekly performance summaries</li><li>Morning briefs and social listening</li><li>Inbox triage and follow-up drafts</li></ul>
+        </article>
+      </div>
+      <ol class="steps">
+        <li><span class="mono">Step 1</span><b>Audit</b><span class="d">We map your marketing workflows and find the tasks worth automating.</span></li>
+        <li><span class="mono">Step 2</span><b>Build</b><span class="d">We set up Claude, connectors, skills and automations inside your tools.</span></li>
+        <li><span class="mono">Step 3</span><b>Train</b><span class="d">Your team learns to run, review and adjust the workflows.</span></li>
+        <li><span class="mono">Step 4</span><b>Improve</b><span class="d">We monitor results and refine the automations as your needs change.</span></li>
+      </ol>
+      <div class="ai-cta">
+        <a class="btn" href="#contact">Book an AI automation audit <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><span class="kicker mono">What we do</span><h2>Services</h2></div>
+        <p>Strategy, channels, craft and AI automation under one roof. Pick a single service or bring us in to run the whole marketing stack.</p>
+      </div>
+      <ul class="svc">
+        <li class="feat"><a href="#ai"><span class="l"><span class="mono">New</span>AI Automation with Claude</span><span class="r">Claude Code · Claude Cowork · Claude in Chrome · Connectors <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a></li>
+        <li><span class="mono">S01</span>Marketing Strategy</li>
+        <li><span class="mono">S02</span>Marketing Communication</li>
+        <li><span class="mono">S03</span>Brand Marketing</li>
+        <li><span class="mono">S04</span>Website Development</li>
+        <li><span class="mono">S05</span>Social Media Marketing</li>
+        <li><span class="mono">S06</span>Content Marketing</li>
+        <li><span class="mono">S07</span>SEO / SEM</li>
+        <li><span class="mono">S08</span>Email Marketing</li>
+        <li><span class="mono">S09</span>CRM: HubSpot, Freshsales, Zoho</li>
+        <li><span class="mono">S10</span>Graphic Design (Adobe Suite)</li>
+        <li><span class="mono">S11</span>E-Commerce</li>
+        <li><span class="mono">S12</span>Partnerships &amp; Exhibitions</li>
+      </ul>
+
+      <div class="duo">
+        <div>
+          <span class="kicker mono">Industry expertise</span>
+          <h3>Sectors we know well</h3>
+          <ul class="tags">
+            <li>Startups</li><li>Information Technology (Cloud)</li><li>Publishing (Books)</li><li>Agriculture Technology</li><li>Multimedia</li><li>Distribution &amp; Supply Chain</li><li>Healthcare</li><li>Environment</li><li>Manufacturing</li>
+          </ul>
+        </div>
+        <div>
+          <span class="kicker mono">Capabilities</span>
+          <h3>Certified in</h3>
+          <ul class="certs">
+            <li>Fundamentals of Digital Marketing</li>
+            <li>Google Analytics Individual Qualification</li>
+            <li>Google Ads Certifications</li>
+            <li>Inbound Methodology</li>
+            <li>HubSpot Sales Software</li>
+            <li>HubSpot Marketing Software</li>
+            <li>B2B Go-to-Market Strategy</li>
+            <li>Global Entrepreneurship</li>
+            <li>Sales in Tech</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="work" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><span class="kicker mono">Portfolio</span><h2>Selected work</h2></div>
+        <p>Websites, social channels, brand identities, video and writing for clients from Jakarta to Riyadh to Adelaide. Click any project to see it live.</p>
+      </div>
+      <nav class="worknav" aria-label="Portfolio categories">
+        <a href="#web">Web Development <span class="mono">08</span></a>
+        <a href="#social">Social Media <span class="mono">06</span></a>
+        <a href="#branding">Branding <span class="mono">11</span></a>
+        <a href="#video">Video Production <span class="mono">10</span></a>
+        <a href="#writing">Articles <span class="mono">25</span></a>
+      </nav>
+
+      <div class="cat" id="web">
+        <div class="cat-head"><h3>Web Development</h3><span class="mono">WordPress · 2018–2026</span></div>
+        <div class="web" id="webList"></div>
+      </div>
+
+      <div class="cat" id="social">
+        <div class="cat-head"><h3>Social Media Management</h3><span class="mono">Instagram · 2019–2026</span></div>
+        <div class="social" id="socialList"></div>
+      </div>
+
+      <div class="cat" id="branding">
+        <div class="cat-head"><h3>Brand Identity</h3><span class="mono">Graphic design · 2012–2024</span></div>
+        <div class="brands" id="brandList"></div>
+      </div>
+
+      <div class="cat" id="video">
+        <div class="cat-head"><h3>Video Production</h3><span class="mono">YouTube · 2017–2024</span></div>
+        <ul class="ledger" id="videoList"></ul>
+      </div>
+
+      <div class="cat" id="writing">
+        <div class="cat-head"><h3>Articles</h3><span class="mono">Content marketing · 2021–2024</span></div>
+        <ul class="ledger" id="articleList"></ul>
+        <details class="more" id="articleMore">
+          <summary><span class="lbl">Show all 25 articles</span></summary>
+          <ul class="ledger" id="articleRest" style="border-top:0"></ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="clients" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><span class="kicker mono">Trusted by</span><h2>Clients</h2></div>
+        <p>Technology firms, publishers, hospitals, agritech startups and manufacturers in five countries.</p>
+      </div>
+      <div class="clients">
+        <span>Terra Drone Arabia</span><span>FISClouds</span><span>ShapeShift Technologies</span><span>GuritaAI</span><span>Mizan Publishing</span><span>Inagri</span><span>Zona Spasial</span><span>Mitra Plumbon Healthcare</span><span>Adelaide Balustrade &amp; Fencing</span><span>Louisiana Home Performance</span><span>Tesla Daya Elektrika</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <span class="mono" style="opacity:.85">Contact</span>
+      <h2 style="margin-top:14px">Let’s build your brand.</h2>
+      <p>Tell us about your product, your audience and where you want to grow.</p>
+    </div>
+    <div class="cbox">
+      <div class="crow"><div><div class="mono">Email</div><span class="v" id="mail">geoterragraphic@gmail.com</span></div><button class="copy" id="copyBtn" type="button">Copy</button></div>
+      <div class="crow"><div><div class="mono">Instagram</div><a class="v" href="https://www.instagram.com/terra.graph/" target="_blank" rel="noopener">@terra.graph ↗</a></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span>© 2026 Terra Graph. Digital marketing agency.</span><span class="mono">MY · IN · SA · US · AU</span></div>
+</footer>
+
+<script>
+const ext='<svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11 11 5M6 5h5v5"/></svg>';
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const web=[
+ ['Adelaide Balustrade & Fencing',2026,'https://www.adbal.com.au/','adbal','Fencing & balustrades · AU'],
+ ['Terra Drone Arabia',2025,'https://terra-drone.com.sa/','tdsa','Drone solutions · SA'],
+ ['GuritaAI',2025,'https://gurita.ai/','gurita','AI platform'],
+ ['ShapeShift Technologies',2024,'https://shapeshift.tech/','shapeshift','Technology consulting'],
+ ['Louisiana Home Performance',2024,'https://lhp.beauxwen.com/','lhp','Home services · US'],
+ ['FISClouds Innovation',2023,'https://www.fisclouds.com/','fis','Cloud & digital infrastructure · IN'],
+ ['Tesla Daya Elektrika',2023,'https://wordpress.tde.co.id/','tde','Electrical engineering · ID'],
+ ['Zona Spasial',2018,'https://zonaspasial.com/','zona','Survey & mapping · ID'],
+];
+document.getElementById('webList').innerHTML=web.map(([n,y,u,k,d])=>`
+ <a href="${u}" target="_blank" rel="noopener">
+  <div class="shot"><img src="img/web-${k}.jpg" alt="${esc(n)} website homepage" loading="lazy"></div>
+  <div class="meta"><h4>${esc(n)}</h4><span class="mono">${y}</span></div>
+  <div class="url">${esc(d)} · ${u.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'')} ${ext}</div>
+ </a>`).join('');
+
+const social=[
+ ['Terra Drone Arabia',2025,'terradrone_sa','tdsa'],
+ ['FISClouds Innovation',2025,'fisclouds','fis'],
+ ['ShapeShift Technologies',2025,'shapeshift.tech','shapeshift'],
+ ['Adelaide Balustrade & Fencing',2026,'adlbalustradefencing','adbal'],
+ ['Mitra Plumbon Healthcare',2020,'rsmitraplumbon','mitra'],
+ ['Inagri',2019,'inagri.asia','inagri'],
+];
+document.getElementById('socialList').innerHTML=social.map(([n,y,h,k])=>`
+ <a class="phone" href="https://www.instagram.com/${h}/" target="_blank" rel="noopener">
+  <div class="frame"><img src="img/social-${k}.jpg" alt="${esc(n)} Instagram profile" loading="lazy"></div>
+  <h4>${esc(n)}</h4><span class="mono">@${h} · ${y}</span>
+ </a>`).join('');
+
+const brands=[
+ ['Rumura',2024,'rumura'],['MizanMU',2022,'mizanmu'],['Energeni',2022,'energeni'],['Majalengka City',2019,'majalengka-exotic-sundaland'],
+ ['Youth in Sustainability',2018,'youth-in-sustainability'],['Eyenas Dental Space',2017,'eyena'],['Inagri',2016,'inagri'],
+ ['Geography Student Association',2016,'hmjpg'],['Recycool',2015,'recycool'],['Rudainah',2014,'rudainah'],['PPI Belfast',2012,'ppi-belfast'],
+];
+document.getElementById('brandList').innerHTML=brands.map(([n,y,k],i)=>`
+ <figure class="${i===0?'lead':''}"><div class="tile"><img src="img/brand-${k}.jpg" alt="${esc(n)} logo" loading="lazy"></div>
+ <figcaption><span>${esc(n)}</span><span class="mono">${y}</span></figcaption></figure>`).join('');
+
+const play='<svg class="arrow" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9.5-5.5z"/></svg>';
+const videos=[
+ ['ShapeShift End Year Closure','ShapeShift Technologies',2024,'i04oY6tUZcw'],
+ ['FISClouds Company Profile','FISClouds',2023,'kPlUXnNLMnI'],
+ ['Data Migration with Google Cloud','FISClouds',2023,'ggIj7NYmBVU'],
+ ['Google Workshop Documentation','FISClouds',2023,'cE4W_UT5-Vc'],
+ ['Tentang Tubuhmu Trailer','Mizan Publishing',2020,'w9fFxzjRdkI'],
+ ['How and Why Book Trailer','Mizan Publishing',2020,'58b2SyGuMNQ'],
+ ['How and Why Book Features','Mizan Publishing',2020,'GPgQGQPKwi8'],
+ ['Recehan Bahasa Trailer','Mizan Publishing',2019,'TH5ZbbGwbvY'],
+ ['Survey Vessel Capabilities','Zona Spasial',2019,'fKNJohA0ck8'],
+ ['Tribute to Farmer’s Day','Insan Agritama Teknologi',2017,'65xkgIoHyEw'],
+];
+document.getElementById('videoList').innerHTML=videos.map(([t,c,y,id])=>`
+ <li><a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">
+  <span class="yr mono">${y}</span><span class="t">${esc(t)}</span><span class="co">${esc(c)}</span><span class="go">${play}</span></a></li>`).join('');
+
+const F='https://www.fisclouds.com/';
+const arts=[
+ ['AI-Powered Knowledge Management for the Intelligent Enterprise',2024,F+'ai-powered-knowledge-management-for-the-intelligent-enterprise-10429/'],
+ ['Why Every Enterprise Needs a Generative AI Partner',2024,F+'why-every-enterprise-needs-a-generative-ai-partner-10288/'],
+ ['Generative AI: Revolutionizing Customer Service With Personalized And Proactive Interactions',2023,F+'generative-ai-revolutionizing-customer-service-with-personalized-and-proactive-interactions-9886/'],
+ ['Google’s LLM Research: From The Lab To The Real World',2023,F+'googles-llm-research-from-the-lab-to-the-real-world-9872/'],
+ ['Accelerate Your Cloud Migration Plan With Managed Databases',2023,F+'accelerate-your-cloud-migration-plan-with-managed-databases-9863/'],
+ ['The Advantage Of Using Cloud Data Warehouse',2023,F+'the-advantage-of-using-cloud-data-warehouse-9772/'],
+ ['Decoding The Downfall Of Metaverse And NFT: Contrasting Paths For The AI Trend',2023,F+'decoding-the-downfall-of-metaverse-and-nft-contrasting-paths-for-the-ai-trend-9708/'],
+ ['Adapting To The Latest AI/ML Trends In The Business World',2023,F+'adapting-to-the-latest-ai-ml-trends-in-the-business-world-9688/'],
+ ['Seamless Data Warehouse Migration To Google Cloud Platform',2023,F+'seamless-data-warehouse-migration-to-google-cloud-platform-9676/'],
+ ['Harnessing The Power Of AI And ML For Data-Driven Insights In Financial Industry',2023,F+'harnessing-the-power-of-ai-and-ml-for-data-driven-insights-in-financial-industry-9652/'],
+ ['How AI Models Understand Human Conversations Through Natural Language Processing',2023,F+'how-ai-models-understand-human-conversations-through-natural-language-processing-9585/'],
+ ['Navigating The AI Job Market: Insights Into The Future Of Work',2023,F+'navigating-the-ai-job-market-insights-into-the-future-of-work-9570/'],
+ ['Ensuring Business Continuity With A Strong Digital Resilience Plan',2023,F+'ensuring-business-continuity-with-a-strong-digital-resilience-plan-9565/'],
+ ['Big Data Meets AI: The Future Of Decision Making',2023,F+'big-data-meets-ai-the-future-of-decision-making-9512/'],
+ ['Big Data And Business Intelligence: How To Leverage Data For Competitive Advantage',2023,F+'big-data-and-business-intelligence-how-to-leverage-data-for-competitive-advantage-9500/'],
+ ['Ensuring Business Continuity With Reliable IT Infrastructure Services',2023,F+'ensuring-business-continuity-with-reliable-it-infrastructure-services-9490/'],
+ ['5 Essential Elements Of Cloud Security',2023,F+'5-essential-elements-of-cloud-security-9396/'],
+ ['5 Key Strategies For Securing Your Cloud Environment',2023,F+'5-key-strategies-to-secure-cloud-9350/'],
+ ['Kubernetes: Enabling Flexible And Scalable Cloud Deployments',2023,F+'kubernetes-enabling-flexible-and-scalable-cloud-deployments-9311/'],
+ ['Kubernetes 101: An Introduction To Container Orchestration',2023,F+'kubernetes-101-an-introduction-to-container-orchestration-9265/'],
+ ['When To Use Public Cloud, Private Cloud, And Hybrid Cloud',2023,F+'when-to-use-public-cloud-private-cloud-and-hybrid-cloud-9249/'],
+ ['The Cloud Technology Update And Trend To Look Up In 2023',2022,F+'the-cloud-technology-update-and-trend-to-look-up-in-2023-9095/'],
+ ['Modernizing Your Application With Microservices',2022,F+'modernizing-your-application-with-microservices-8948/'],
+ ['Cloud Security Services To Protect Your Web Application',2022,F+'cloud-security-services-to-protect-your-web-application-7644/'],
+ ['Redefining Learning in the New Millennium',2021,'https://www.linkedin.com/pulse/redefining-learning-new-millenium-ricky-p-ramadhan/','LinkedIn'],
+];
+const row=([t,y,u,c])=>`<li><a href="${u}" target="_blank" rel="noopener"><span class="yr mono">${y}</span><span class="t">${esc(t)}</span><span class="co">${c||'FISClouds'}</span><span class="go">${ext}</span></a></li>`;
+document.getElementById('articleList').innerHTML=arts.slice(0,8).map(row).join('');
+document.getElementById('articleRest').innerHTML=arts.slice(8).map(row).join('');
+const more=document.getElementById('articleMore');
+more.addEventListener('toggle',()=>{more.querySelector('.lbl').textContent=more.open?'Show fewer':'Show all 25 articles'});
+
+document.getElementById('copyBtn').addEventListener('click',e=>{
+  const b=e.currentTarget, v=document.getElementById('mail');
+  const done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1800)};
+  try{navigator.clipboard.writeText(v.textContent).then(done,()=>{sel(v);b.textContent='Selected';});}catch(_){sel(v)}
+});
+function sel(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+</script>
+
+</body></html>
