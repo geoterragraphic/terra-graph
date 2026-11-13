@@ -8,16 +8,16 @@
 <meta name="description" content="Terra Graph offers AI-powered digital marketing services: AI automation, websites, social media, branding, video and content.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Space+Grotesk:wght@500..700&display=swap">
 <style>
 /* Layout: asymmetric 12-col editorial grid. Work is an indexed ledger (year in mono, client, discipline).
    The hexagon from the Terra Graph mark is the only ornament. */
 :root{
   --bg:#F5F3F2; --surface:#FFFFFF; --ink:#1A1416; --muted:#6A5F61; --line:#E2DBDA;
   --red:#E4122A; --red-ink:#C20E22; --on-red:#FFFFFF; --tile:#FFFFFF;
-  --f-display:"Google Sans","Product Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-body:"Google Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"Google Sans",system-ui,sans-serif;
+  --f-display:"Space Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Inter",system-ui,sans-serif;
   --band:#18121A; --band-2:#241C26; --band-fg:#F6F0F0; --band-muted:#B5A9AC; --band-line:#3A2F38;
   --maxw:1240px;
 }
@@ -37,7 +37,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 .wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
 @media (max-width:520px){.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
 .mono{font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}
-h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance;margin:0}
+h1,h2,h3,h4{font-family:var(--f-display)}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.05;letter-spacing:-.02em;text-wrap:balance;margin:0}
 
 /* nav */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
@@ -59,7 +60,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:end}
 .eyebrow{display:flex;align-items:center;gap:10px;color:var(--muted);margin-bottom:28px}
 .eyebrow i{width:9px;height:10px;background:var(--red);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
-.hero h1{font-size:clamp(38px,6.2vw,92px);font-weight:700;letter-spacing:-.025em;line-height:.98}
+.hero h1{text-transform:uppercase;font-size:clamp(38px,6.2vw,92px);font-weight:700;letter-spacing:-.025em;line-height:.98}
 .hero h1 em{font-style:normal;color:var(--red)}
 .hero p.lede{font-size:clamp(18px,1.6vw,21px);max-width:34ch;color:var(--ink);margin:0 0 28px}
 .cta-row{display:flex;flex-wrap:wrap;gap:12px}
@@ -303,7 +304,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="wrap">
       <span class="badge mono">Featured service</span>
       <div class="ai-top">
-        <h2>AI-Powered <em>Services</em></h2>
+        <h2>AI-powered <em>services</em></h2>
         <p><strong>We put AI agents to work on your marketing operations.</strong> We automate the repetitive work behind campaigns, reporting and content production, so your team spends its time on strategy and creative decisions. We design the workflows, set them up inside your tools and train your team to run them.</p>
       </div>
       <div class="tools">
@@ -373,30 +374,30 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <p>Websites, social channels, brand identities, video and writing for clients from Jakarta to Riyadh to Adelaide. Click any project to see it live.</p>
       </div>
       <nav class="worknav" aria-label="Portfolio categories">
-        <a href="#web">Web Development <span class="mono">08</span></a>
-        <a href="#social">Social Media <span class="mono">06</span></a>
+        <a href="#web">Web development <span class="mono">08</span></a>
+        <a href="#social">Social media <span class="mono">06</span></a>
         <a href="#branding">Branding <span class="mono">11</span></a>
-        <a href="#video">Video Production <span class="mono">10</span></a>
+        <a href="#video">Video production <span class="mono">10</span></a>
         <a href="#writing">Articles <span class="mono">25</span></a>
       </nav>
 
       <div class="cat" id="web">
-        <div class="cat-head"><h3>Web Development</h3><span class="mono">WordPress · 2018–2026</span></div>
+        <div class="cat-head"><h3>Web development</h3><span class="mono">WordPress · 2018–2026</span></div>
         <div class="web" id="webList"></div>
       </div>
 
       <div class="cat" id="social">
-        <div class="cat-head"><h3>Social Media Management</h3><span class="mono">Instagram · 2019–2026</span></div>
+        <div class="cat-head"><h3>Social media management</h3><span class="mono">Instagram · 2019–2026</span></div>
         <div class="social" id="socialList"></div>
       </div>
 
       <div class="cat" id="branding">
-        <div class="cat-head"><h3>Brand Identity</h3><span class="mono">Graphic design · 2012–2024</span></div>
+        <div class="cat-head"><h3>Brand identity</h3><span class="mono">Graphic design · 2012–2024</span></div>
         <div class="brands" id="brandList"></div>
       </div>
 
       <div class="cat" id="video">
-        <div class="cat-head"><h3>Video Production</h3><span class="mono">YouTube · 2017–2024</span></div>
+        <div class="cat-head"><h3>Video production</h3><span class="mono">YouTube · 2017–2024</span></div>
         <ul class="ledger" id="videoList"></ul>
       </div>
 
